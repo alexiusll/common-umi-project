@@ -1,7 +1,7 @@
 /*
- * @Descripttion: 404页面，目前很简陋
+ * @Descripttion: 权限插件测试页面
  * @Author: linkenzone
- * @Date: 2020-09-06 21:24:32
+ * @Date: 2021-03-22 23:36:06
  */
 
 import { Button, Result } from 'antd';
@@ -10,9 +10,8 @@ import { history } from 'umi';
 
 const NoFoundPage: React.FC<{}> = () => (
   <Result
-    status="404"
-    title="404"
-    subTitle="Sorry, the page you visited does not exist."
+    title="进入了admin页面"
+    subTitle="进入了admin页面"
     extra={
       <Button type="primary" onClick={() => history.push('/')}>
         Back Home

@@ -8,20 +8,14 @@
 export default [
   {
     path: '/',
-    component: '@/layouts/BlankLayout',
+    component: '@/layouts/HeaderLayout',
     routes: [
       {
         path: '/',
-        component: '@/layouts/HeaderLayout',
-        routes: [
-          {
-            path: '/',
-            component: '@/pages/index.tsx',
-          },
-          {
-            component: '404',
-          },
-        ],
+        component: '@/pages/index.tsx',
+      },
+      {
+        component: '@/pages/exception/404',
       },
     ],
   },

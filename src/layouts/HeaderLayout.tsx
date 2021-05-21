@@ -4,23 +4,23 @@
  * @Date: 2020-09-06 21:24:32
  */
 
-import ProLayout, {
+import type {
   MenuDataItem,
   BasicLayoutProps as ProLayoutProps,
   Settings,
 } from '@ant-design/pro-layout';
-import { Link, useIntl, connect, Dispatch } from 'umi';
+import ProLayout from '@ant-design/pro-layout';
+import type { Dispatch } from 'umi';
+import { Link, useIntl, connect } from 'umi';
 import React, { useEffect, useState } from 'react';
 import RightContent from '@/components/GlobalHeader/RightContent';
 import logoImg from '@/assets/rayplus.png';
 import { UseInfoDataType } from '@/models/data';
-// import SignModal from '../components/SignModal/index';
 import style from './index.less';
 
 export interface BasicLayoutProps extends ProLayoutProps {
-  breadcrumbNameMap: {
-    [path: string]: MenuDataItem; // proLayout的组件
-  };
+  // eslint-disable-next-line @typescript-eslint/consistent-indexed-object-style
+  breadcrumbNameMap: { [path: string]: MenuDataItem }; // proLayout的组件
   route: ProLayoutProps['route'] & {
     authority: string[];
   };
@@ -28,7 +28,7 @@ export interface BasicLayoutProps extends ProLayoutProps {
   dispatch: Dispatch;
 }
 
-const BasicLayout: React.FC<BasicLayoutProps> = props => {
+const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
   const {
     dispatch,
     children,
@@ -38,13 +38,9 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
     },
   } = props;
 
-  const [title, setTitle] = useState('临床试验样本');
+  const [title, setTitle] = useState('医学影像处理系统');
 
   const [SignModalVisible, setSignModalVisible] = useState(false);
-
-  // const SignModal_closeHandler = () => {
-  //   setSignModalVisible(false);
-  // };
 
   const SignModal_OpenHandler = () => {
     setSignModalVisible(true);
@@ -58,46 +54,43 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
     if (path_list[1] === 'sample') {
       setTitle('CRF详情');
     } else {
-      setTitle('临床试验样本');
+      setTitle('医学影像处理系统');
     }
   }, [props.location]);
 
   return (
     <>
       <ProLayout
-        title="临床试验管理"
+        title="医学影像处理系统"
         logo={logoImg}
-        menuHeaderRender={logoDom => {
+        menuHeaderRender={(logoDom) => {
           // 渲染 logo 和 title
           return (
-            <>
+            <div style={{ paddingLeft: '16px' }}>
               <Link to="/">{logoDom}</Link>
               <h1
                 style={{
                   fontSize: 22,
-                  // width: '300px',
                   color: '#39bbdb',
-                  lineHeight: '70px',
+                  lineHeight: '48px',
                 }}
               >
                 {title}
               </h1>
-            </>
+            </div>
           );
         }}
-        layout="topmenu"
+        layout="top"
         navTheme="light"
         disableMobile
         fixSiderbar={false}
         // contentWidth = 'Fluid'
         rightContentRender={() => <RightContent onClickSign={SignModal_OpenHandler} />}
-        contentStyle={{ margin: '0', backgroundColor: 'white', minHeight: 800 }}
+        contentStyle={{ margin: '0', backgroundColor: 'white' }}
         className={style.custom_layout}
       >
         {children}
       </ProLayout>
-
-      {/* <SignModal visible={SignModalVisible} closeHandler={SignModal_closeHandler} /> */}
     </>
   );
 };

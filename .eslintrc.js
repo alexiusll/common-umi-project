@@ -1,3 +1,9 @@
+/*
+ * @Author: linkenzone
+ * @Date: 2021-05-21 16:30:28
+ * @Descripttion: eslint 配置文件
+ */
+
 module.exports = {
   extends: [require.resolve('@umijs/fabric/dist/eslint')],
   globals: {
@@ -5,6 +11,7 @@ module.exports = {
     page: true,
     REACT_APP_ENV: true,
   },
+  // 可以适当禁用部分规则
   rules: {
     'no-param-reassign': 0,
     'no-restricted-syntax': 0,

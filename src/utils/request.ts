@@ -5,7 +5,6 @@
  * 更详细的 api 文档: https://github.com/umijs/umi-request
  */
 
- 
 import { extend } from 'umi-request';
 import { notification, message } from 'antd';
 import Cookies from 'js-cookie';
@@ -29,17 +28,18 @@ const codeMessage = {
   503: '服务不可用，服务器暂时过载或维护。',
   504: '网关超时。',
 };
-const config = {
-  // mock
-  mock: 'http://39.96.191.139:3000/mock/12',
-  mock_auth: 'http://39.96.191.139:81',
-  // 测试服务器地址
-  pre: 'http://39.106.111.52:84',
-  pre_auth: 'http://39.106.111.52/api',
-  // 生产环境地址
-  prod: 'http://www.rayplus.top:84',
-  prod_auth: 'http://www.rayplus.top:81',
-};
+// 弃用
+// const config = {
+//   // mock
+//   mock: 'http://39.96.191.139:3000/mock/12',
+//   mock_auth: 'http://39.96.191.139:81',
+//   // 测试服务器地址
+//   pre: 'http://39.106.111.52:84',
+//   pre_auth: 'http://39.106.111.52/api',
+//   // 生产环境地址
+//   prod: 'http://www.rayplus.top:84',
+//   prod_auth: 'http://www.rayplus.top:81',
+// };
 // #endregion
 
 /**
@@ -72,22 +72,22 @@ const request = extend({
 });
 
 const { NODE_ENV } = process.env;
-const ENV = 'pre';
 
-export const post_prefix = config[ENV];
+// const ENV = 'pre';
+// export const post_prefix = config[ENV];
 
 let COOKIE_CONFIRM = true;
 
-function custom_request(url: string, { method = 'GET', params = {}, data = {} }) {
+function custom_request<T>(url: string, { method = 'GET', params = {}, data = {} }) {
   let prefix: string;
 
   if (/rbac/.test(url)) {
     // 权限管理请求
-    prefix = NODE_ENV === 'development' ? '/rbac' : config[`${ENV}_auth`];
+    prefix = NODE_ENV === 'development' ? '/rbac' : API_AUTH_URL;
     url = url.slice(5);
   } else {
     // rwe请求
-    prefix = NODE_ENV === 'development' ? '/api' : config[ENV];
+    prefix = NODE_ENV === 'development' ? '/api' : API_URL;
   }
 
   // 判断cookie是否失效
@@ -103,8 +103,8 @@ function custom_request(url: string, { method = 'GET', params = {}, data = {} })
   }
   if (!COOKIE_CONFIRM) COOKIE_CONFIRM = true; // 防止同时多次请求
 
-  return new Promise(resolve => {
-    request(prefix + url, {
+  return new Promise((resolve) => {
+    request<T>(prefix + url, {
       method,
       params: removeNull(params),
       data: removeNull(data),
@@ -114,7 +114,7 @@ function custom_request(url: string, { method = 'GET', params = {}, data = {} })
         'Content-Type': 'application/json',
         Authorization: `Bearer ${Cookies.get('token')}`,
       },
-    }).then(res => {
+    }).then((res: any) => {
       if (res && res.code === 200) {
         // 如果post请求没有data，就返回true，以便判断generator下一步执行
         if (res.total !== undefined) {
@@ -127,7 +127,7 @@ function custom_request(url: string, { method = 'GET', params = {}, data = {} })
           message: res.msg,
         });
       }
-      resolve(); // 错误不能reject 会导致generator call函数出错
+      resolve(null); // 错误不能reject 会导致generator call函数出错
     });
   });
 }

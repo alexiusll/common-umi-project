@@ -1,9 +1,8 @@
 /*
- * @Descripttion: 通用的工具类
+ * @Descripttion: 工具类
  * @Author: linkenzone
  * @Date: 2020-09-06 22:14:37
  */
-
 
 import moment from 'moment';
 
